@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+{% load staticfiles %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    {% block mycss %}{% endblock %}
+    <style>
+        #footer {
+            padding: 15px 0;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+
+        #topcontrol {
+            color: #fff;
+            z-index: 99;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            background: #222;
+            position: relative;
+            right: 14px !important;
+            bottom: 11px !important;
+            border-radius: 3px !important;
+        }
+
+        #topcontrol:after {
+            /*top: -2px;*/
+            left: 8.5px;
+            content: "\f106";
+            position: absolute;
+            text-align: center;
+            font-family: FontAwesome;
+        }
+
+        #topcontrol:hover {
+            color: #fff;
+            background: #18ba9b;
+            -webkit-transition: all 0.3s ease-in-out;
+            -moz-transition: all 0.3s ease-in-out;
+            -o-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .nav-tabs > li.active > a,
+        .nav-tabs > li.active > a:focus,
+        .nav-tabs > li.active > a:hover {
+            border-bottom-color: #ddd;
+        }
+
+        .nav-tabs > li > a {
+            border-radius: 0;
+        }
+    </style>
+</head>
+<div class="navbar-wrapper">
+    <div class="container">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#" style="font-size:32px;">尚筹网-创意产品众筹平台</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse" style="float:right;">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
+                                    class="glyphicon glyphicon-user"></i> {{ request.user.username }}
+                                <span class="caret"></span></a>
+                            {% if request.user.is_authenticated %}
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="#"><i class="glyphicon glyphicon-scale"></i> 会员中心</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="{% url 'users:user_logout' %}"><i class="glyphicon glyphicon-off"></i>
+                                            退出系统</a>
+                                    </li>
+                                </ul>
+                            {% else %}
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{% url 'users:user_login' %}"><i class="glyphicon glyphicon-scale"></i>
+                                            登录</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="{% url 'users:user_register' %}"><i
+                                                class="glyphicon glyphicon-off"></i> 注册</a>
+                                    </li>
+                                </ul>
+                            {% endif %}
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a rel="nofollow" href="index.html"><i class="glyphicon glyphicon-home"></i> 众筹首页</a>
+                            </li>
+                            <li>
+                                <a rel="nofollow" href="projects.html"><i class="glyphicon glyphicon-th-large"></i> 众筹项目</a>
+                            </li>
+                            <li>
+                                <a rel="nofollow" href="start.html"><i class="glyphicon glyphicon-edit"></i> 发起众筹</a>
+                            </li>
+                            <li>
+                                <a rel="nofollow" href="minecrowdfunding.html"><i class="glyphicon glyphicon-user"></i>
+                                    我的众筹</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% block content %}
+
+{% endblock %}
+
+<div class="container" style="margin-top:20px;">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div id="footer">
+                <div class="footerNav">
+                    <a rel="nofollow" href="http://www.atguigu.com">关于我们</a> |
+                    <a rel="nofollow" href="http://www.atguigu.com">服务条款</a> |
+                    <a rel="nofollow" href="http://www.atguigu.com">免责声明</a> |
+                    <a rel="nofollow" href="http://www.atguigu.com">网站地图</a> |
+                    <a rel="nofollow" href="http://www.atguigu.com">联系我们</a>
+                </div>
+                <div class="copyRight">
+                    Copyright ?2018-2018atguigu.com 版权所有
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="{% static 'jquery/jquery-2.1.1.min.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'script/docs.min.js' %}"></script>
+<script src="{% static 'script/back-to-top.js' %}"></script>
+<script>{% static '' %}
+    $(".prjtip img").css("cursor", "pointer");
+    $(".prjtip img").click(function () {
+        window.location.href = 'project.html';
+    });
+    {% block myjs %}{% endblock %}
+</script>
+
+
+</html>

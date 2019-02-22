@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    <style>
+        #footer {
+            padding: 15px 0;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+
+        #topcontrol {
+            color: #fff;
+            z-index: 99;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            background: #222;
+            position: relative;
+            right: 14px !important;
+            bottom: 11px !important;
+            border-radius: 3px !important;
+        }
+
+        #topcontrol:after {
+            /*top: -2px;*/
+            left: 8.5px;
+            content: "\f106";
+            position: absolute;
+            text-align: center;
+            font-family: FontAwesome;
+        }
+
+        #topcontrol:hover {
+            color: #fff;
+            background: #18ba9b;
+            -webkit-transition: all 0.3s ease-in-out;
+            -moz-transition: all 0.3s ease-in-out;
+            -o-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .label-type,
+        .label-status,
+        .label-order {
+            background-color: #fff;
+            color: #f60;
+            padding: 5px;
+            border: 1px #f60 solid;
+        }
+
+        #typeList :not(:first-child) {
+            margin-top: 20px;
+        }
+
+        .label-text {
+            margin: 0 10px;
+        }
+
+        .panel {
+            border-radius: 0;
+        }
+
+        h3.break {
+            font-size: 16px;
+            display: block;
+            white-space: nowrap;
+            word-wrap: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        h3.break > a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="navbar-wrapper">
+    <div class="container">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#" style="font-size:32px;">尚筹网-创意产品众筹平台</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse" style="float:right;">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
+                                    class="glyphicon glyphicon-user"></i> {{ request.user.username }}
+                                <span class="caret"></span></a>
+                            {% if request.user.is_authenticated %}
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{% url 'users:user_center' %}">
+                                            <i class="glyphicon glyphicon-scale"></i> 会员中心</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="{% url 'users:user_logout' %}"><i class="glyphicon glyphicon-off"></i>
+                                            退出系统</a>
+                                    </li>
+                                </ul>
+                            {% else %}
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{% url 'users:user_login' %}"><i class="glyphicon glyphicon-scale"></i>
+                                            登录</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="{% url 'users:user_register' %}"><i
+                                                class="glyphicon glyphicon-off"></i> 注册</a>
+                                    </li>
+                                </ul>
+                            {% endif %}
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+</div>
+<div class="container theme-showcase" role="main">
+
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a rel="nofollow" href="/"><i class="glyphicon glyphicon-home"></i> 众筹首页</a>
+                            </li>
+                            <li class="active">
+                                <a rel="nofollow" href="javascript:;"><i class="glyphicon glyphicon-th-large"></i> 项目总览</a>
+                            </li>
+                            <li>
+                                <a rel="nofollow" href="start.html"><i class="glyphicon glyphicon-edit"></i> 发起众筹</a>
+                            </li>
+                            <li>
+                                <a rel="nofollow" href="minecrowdfunding.html"><i class="glyphicon glyphicon-user"></i>
+                                    我的众筹</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <ul id="typeList" style="list-style: none;">
+                            <li>
+                                分类：
+                                <a href="?&cat={{ cat }}"><span
+                                        class="{% if  catgoryid == '' %}label-type{% endif %} actvie">全部</span></a>
+                                {% for catgory in all_catgoryInfo %}
+                                    <a href="?catgoryid={{ catgory.id }}&cat={{ cat }}">
+                                        <span class="{% if catgoryid == catgory.id|stringformat:"i" %}label-type{% endif %} actvie">{{ catgory.name }}</span></a>
+                                {% endfor %}
+                            </li>
+                            <li>
+                                状态：
+                                <a href="?&catgoryid={{ catgory.id }}"><span
+                                        class="{% if cat == '' %}label-status {% endif %}actvie">全部</span></a>
+                                <a href="?&cat=jjks&catgoryid={{ catgory.id }}"><span
+                                        class="{% if cat == 'jjks' %}label-status {% endif %}actvie ">即将开始</span></a>
+                                <a href="?&cat=zcz&catgoryid={{ catgory.id }}"><span
+                                        class="{% if cat ==  'zcz' %}label-status actvie{% endif %} ">众筹中</span></a>
+                                <a href="?&cat=zccg&catgoryid={{ catgory.id }}"><span
+                                        class="{% if cat == 'zccg' %}label-status actvie{% endif %}">众筹成功</span></a>
+                                <a href="?&cat=zcsb&catgoryid={{ catgory.id }}"><span
+                                        class="{% if cat == 'zcsb' %}label-status  actvie{% endif %}">众筹失败</span></a>
+                            </li>
+                            <li>
+                                排序：
+                                <a href="?&catgoryid={{ catgory.id }}&cat={{ cat }}"><span
+                                        {% if sort == '' %}class="label-order active"
+                                        {% else %}class="label-text"{% endif %}>综合排序</span></a>
+                                <a href="?sort=news&catgoryid={{ catgory.id }}&cat={{ cat }}"><span
+                                        {% if sort == 'news' %}class="label-order active"
+                                        {% else %}class="label-text"{% endif %}>最新上线</span></a>
+                                <a href="?sort=money&catgoryid={{ catgory.id }}&cat={{ cat }}"><span
+                                        {% if sort == 'money' %}class="label-order active"
+                                        {% else %}class="label-text"{% endif %}>金额最多</span></a>
+                                <a href="?sort=person&catgoryid={{ catgory.id }}&cat={{ cat }}"><span
+                                        {% if sort == 'person' %}class="label-order active"
+                                        {% else %}class="label-text"{% endif %}>支持最多</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="panel-footer" style="height:50px;padding:0;">
+                        <div style="float:left;padding:15px;">
+                            共{{ all_project.count }}个众筹项目
+                        </div>
+                        <div style="float:right;">
+                            <form class="navbar-form navbar-left" role="search" method="get"
+                                  action="{% url 'items:item_list' %}">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="请输入搜索内容" name="keywords">
+                                </div>
+                                <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>
+                                    搜索
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="row">
+                    {% for pro in page_list %}
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <img alt="300x200" src="{{ MEDIA_URL }}{{ pro.image }}"/>
+                                <div class="caption">
+                                    <h3 class="break">
+                                        <a href="{% url 'items:item_detail' pro.id %}">{{ pro.title }}</a>
+                                    </h3>
+                                    <p>
+                                    <div style="float:left;"><i class="glyphicon glyphicon-screenshot" title="目标金额"></i>
+                                        ${{ pro.money_total }}
+                                    </div>
+                                    <div style="float:right;"><i title="截至日期" class="glyphicon glyphicon-calendar"></i>
+                                        {{ pro.end_time | date:"Y-m-d" }}
+                                    </div>
+                                    </p>
+                                    <br>
+                                    <div class="progress" style="margin-bottom: 4px;">
+                                        <div class="progress-bar progress-bar-success" role="progressbar"
+                                             aria-valuenow="40"
+                                             aria-valuemin="0" aria-valuemax="100"
+                                             style="width: {% widthratio pro.money_ing pro.money_total 100 %}%">
+                                            <span>{% widthratio pro.money_ing pro.money_total 100 %}% </span>
+                                        </div>
+                                    </div>
+                                    <div><span style="float:right;"><i
+                                            class="glyphicon glyphicon-star-empty"></i></span>
+                                        <span><i class="glyphicon glyphicon-user"
+                                                 title="支持人数"></i> {{ pro.nums }}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column" style="text-align:center">
+                <ul class="pagination">
+                    {% if page_list.has_previous %}
+                        <li><a rel="nofollow"
+                               href="?pagenum={{ page_list.previous_page_number }}&sort={{ sort }}&catgoryid={{ catgory.id }}&cat={{ cat }}&keywords={{ keywords }}">上一页</a>
+                        </li>
+                    {% else %}
+                        <li><a rel="nofollow"
+                               href="?pagenum=1&sort={{ sort }}&catgoryid={{ catgory.id }}&cat={{ cat }}&keywords={{ keywords }}">上一页</a>
+                        </li>
+                    {% endif %}
+                    {% for num in page_list.paginator.page_range %}
+                        <li {% if num == page_list.number %}class="active" {% endif %}>
+                            <a rel="nofollow"
+                               href="?pagenum={{ num }}&sort={{ sort }}&catgoryid={{ catgory.id }}&cat={{ cat }}&keywords={{ keywords }}">{{ num }}</a>
+                        </li>
+                    {% endfor %}
+                    {% if page_list.has_next %}
+                        <li>
+                            <a rel="nofollow"
+                               href="?pagenum{{ page_list.next_page_number }}&sort={{ sort }}&catgoryid={{ catgory.id }}&cat={{ cat }}&keywords={{ keywords }}">下一页</a>
+                        </li>
+                    {% else %}
+                        <li><a rel="nofollow"
+                               href="?pagenum{{ page_list.paginator.num.pages }}&sort={{ sort }}&catgoryid={{ catgory.id }}&cat={{ cat }}&keywords={{ keywords }}">下一页</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top:20px;">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div id="footer">
+                    <div class="footerNav">
+                        <a rel="nofollow" href="http://www.atguigu.com">关于我们</a> |
+                        <a rel="nofollow" href="http://www.atguigu.com">服务条款</a> |
+                        <a rel="nofollow" href="http://www.atguigu.com">免责声明</a> |
+                        <a rel="nofollow" href="http://www.atguigu.com">网站地图</a> |
+                        <a rel="nofollow" href="http://www.atguigu.com">联系我们</a>
+                    </div>
+                    <div class="copyRight">
+                        Copyright ?2018-2018atguigu.com 版权所有
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /container -->
+<script src="{% static 'jquery/jquery-2.1.1.min.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'script/docs.min.js' %}"></script>
+<script src="{% static 'script/back-to-top.js' %}"></script>
+<script>
+    $('#myTab a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+</script>
+</body>
+
+</html>

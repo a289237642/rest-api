@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block style %}
+    <style>
+        #footer {
+            padding: 15px 0;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container theme-showcase" role="main">
+        <div class="page-header">
+            <h1>实名认证 - 申请</h1>
+        </div>
+
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation"><a href="#"><span class="badge">1</span> 基本信息</a></li>
+            <li role="presentation" class="active"><a href="#"><span class="badge">2</span> 资质文件上传</a></li>
+            <li role="presentation"><a href="#"><span class="badge">3</span> 邮箱确认</a></li>
+            <li role="presentation"><a href="#"><span class="badge">4</span> 申请确认</a></li>
+        </ul>
+
+        <form role="form" style="margin-top:20px;" enctype="multipart/form-data" method="post" action="{% url 'users:user_applyOne' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="exampleInputIdcardPic">手执身份证照片</label>
+                <input type="file" name="id_photo" class="form-control" id="exampleInputIdcardPic">
+                <br>
+                <img src="{% static 'img/pic.jpg' %}">
+            </div>
+            <button type="button" onclick="window.location.href='{% url 'users:user_verify' %}'" class="btn btn-default">上一步</button>
+            <button type="submit"  class="btn btn-success">下一步</button>
+            <div>
+                {{ msg }}
+            </div>
+        </form>
+        <hr>
+    </div>
+{% endblock %}
+{% block myjs %}
+    <script>
+        $('#myTab a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        });
+    </script>
+{% endblock %}

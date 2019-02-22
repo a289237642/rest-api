@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block style %}
+    <style>
+        #footer {
+            padding: 15px 0;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container theme-showcase" role="main">
+        <div class="page-header">
+            <h1>实名认证 - 申请</h1>
+        </div>
+
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation"><a href="#"><span class="badge">1</span> 基本信息</a></li>
+            <li role="presentation"><a href="#"><span class="badge">2</span> 资质文件上传</a></li>
+            <li role="presentation" class="active"><a href="#"><span class="badge">3</span> 邮箱确认</a></li>
+            <li role="presentation"><a href="#"><span class="badge">4</span> 申请确认</a></li>
+        </ul>
+
+        <form role="form" style="margin-top:20px;" method="post" action="{% url 'users:user_applyTwo' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="exampleInputEmail1">邮箱地址</label>
+                <input type="text" class="form-control" name="email" id="exampleInputEmail1" placeholder="请输入用于接收验证码的邮箱地址">
+            </div>
+            <button type="button" onclick="window.location.href='{% url 'users:user_verify' %}'" class="btn btn-default">上一步</button>
+            <button type="submit"  class="btn btn-success">下一步</button>
+            <div>
+                {{ msg }}
+            </div>
+        </form>
+        <hr>
+    </div>
+{% endblock %}
+
+{% block myjs %}
+    <script>
+        $('#myTab a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        });
+    </script>
+{% endblock %}
+

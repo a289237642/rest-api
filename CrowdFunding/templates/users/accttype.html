@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block style %}
+    <style>
+        #footer {
+            padding: 15px 0;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .seltype {
+            position: absolute;
+            margin-top: 70px;
+            margin-left: 10px;
+            color: red;
+        }
+
+        .thumbnail img {
+            height: 180px;
+            width: 100%;
+            display: block;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container theme-showcase" role="main">
+        <div class="page-header">
+            <h1>实名认证 - 账户类型选择</h1></div>
+        <div style="padding-top:10px;">
+            <div class="row">
+                <div class="col-xs-6 col-md-3">
+                    <h2>商业公司</h2>
+                    <a href="#" class="thumbnail" category="1">
+                        <img alt="100%x180" src="{% static 'img/services-box1.jpg' %}" data-holder-rendered="true">
+                    </a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <h2>个体工商户</h2>
+                    <a href="#" class="thumbnail" category="2">
+                        <img alt="100%x180" src="{% static 'img/services-box2.jpg' %}" data-holder-rendered="true">
+                    </a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <h2>个人经营</h2>
+                    <a href="#" class="thumbnail" category="3">
+                        <img alt="100%x180" src="{% static 'img/services-box3.jpg' %}" data-holder-rendered="true">
+                    </a>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <h2>政府及非营利组织</h2>
+                    <a href="#" class="thumbnail" category="4">
+                        <img alt="100%x180" src="{% static 'img/services-box4.jpg' %}" data-holder-rendered="true">
+                    </a>
+                </div>
+            </div>
+            <button type="button" class="btn btn-danger btn-lg btn-block" id="user_auth">
+                认证申请
+            </button>
+        </div>
+
+    </div>
+{% endblock %}
+{% block myjs %}
+        <script>
+            $(".thumbnail").click(function () {
+                $('.seltype').remove();
+                $(this).prepend('<div class="glyphicon glyphicon-ok seltype"></div>');
+                var category = $(this).attr('category');
+                $('#user_auth').click(function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'users:user_verify' %}',
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            category: category,
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                window.location.href = '{% url 'users:user_apply' %}'
+                            } else {
+                                alert(callback.msg)
+                            }
+                        }
+                    })
+                })
+            });
+
+        </script>
+
+{% endblock %}

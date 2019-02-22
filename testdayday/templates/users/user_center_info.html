@@ -1,0 +1,38 @@
+{% extends 'users/user_center_base.html' %}
+{% load staticfiles %}
+{% block usercontent %}
+    <div class="right_content clearfix">
+        <div class="info_con clearfix">
+				<h3 class="common_title2">基本信息</h3>
+						<ul class="user_info_list">
+							<li><span>用户名：</span>{{ request.user.username }}</li>
+							<li><span>联系方式：</span>{{ request.user.phone }}</li>
+							<li><span>联系地址：</span>{{ request.user.address }}</li>
+						</ul>
+				</div>
+        <h3 class="common_title2">最近浏览</h3>
+        <div class="has_view_list">
+					<ul class="goods_type_list clearfix">
+                        {% for good in goods_list %}
+                            <li>
+                            <a href="{% url 'goods:goods_detail' good.id %}"><img src="{{ MEDIA_URL }}{{ good.goods_image }}"></a>
+                            <h4><a href="{% url 'goods:goods_detail' good.id %}">{{ good.goods_name }}</a></h4>
+                            <div class="operate">
+                                <span class="prize">￥{{ good.goods_price }}</span>
+                                <span class="unit">{{ good.goods_price }}/{{ good.goods_unit }}</span>
+                                <a href="#" class="add_goods" title="加入购物车"></a>
+                            </div>
+                            </li>
+                        {% endfor %}
+			        </ul>
+		        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+

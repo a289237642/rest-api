@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block style %}
+    <style>
+        #footer {
+            padding: 15px 0;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container theme-showcase" role="main">
+        <div class="page-header">
+            <h1>实名认证 - 申请</h1>
+        </div>
+
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation"><a href="#"><span class="badge">1</span> 基本信息</a></li>
+            <li role="presentation"><a href="#"><span class="badge">2</span> 资质文件上传</a></li>
+            <li role="presentation"><a href="#"><span class="badge">3</span> 邮箱确认</a></li>
+            <li role="presentation" class="active"><a href="#"><span class="badge">4</span> 申请确认</a></li>
+        </ul>
+
+        <form role="form" style="margin-top:20px;" action="{% url 'users:user_applyThree' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="exampleInputEmail1">验证码</label>
+                <input type="text" class="form-control" name="code" id="exampleInputEmail1"
+                       placeholder="请输入你邮箱中接收到的验证码">
+            </div>
+            <button type="button" id="resend" class="btn btn-primary">重新发送验证码</button>
+            <button type="submit" class="btn btn-success">申请完成</button>
+            {{ msg }}
+            {% for value,err in apply_three_form.errors.items %}
+                {{ err }}
+            {% endfor %}
+        </form>
+        <hr>
+    </div>
+{% endblock %}
+{% block myjs %}
+    <script>
+        $('#myTab a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        });
+        $('#resend').click(function () {
+            $.ajax({
+                type: 'get',
+                url: '{% url 'users:user_restart'%}',
+                data: {user_id:{{ request.user.id }},},
+                success: function (callback) {
+                    if (callback.status == 'ok') {
+                        alert('重置验证码成功')
+                    } else {
+                        alert('重置验证码失败')
+                    }
+                }
+            })
+        })
+    </script>
+{% endblock %}

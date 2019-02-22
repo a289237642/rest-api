@@ -1,0 +1,72 @@
+{% extends 'goods/goos_base.html' %}
+{% load staticfiles %}
+{% block title %}天天生鲜-商品列表{% endblock %}
+{% block content %}
+	<div class="breadcrumb">
+		<a href="#">全部分类</a>
+		<span>></span>
+		<a href="{% url 'goods:goods_list' cat_id sort_id 1%}">{{ catgory.name }}</a>
+	</div>
+
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>新品推荐</h3>
+				<ul>
+                    {% for tui in tui_goods %}
+					<li>
+						<a href="{% url 'goods:goods_detail' tui.id %}"><img src="{{ MEDIA_URL }}{{ tui.goods_image }}"></a>
+						<h4><a href="{% url 'goods:goods_detail' tui.id %}">{{ tui.goods_name }}</a></h4>
+						<div class="prize">￥{{ tui.goods_price }}</div>
+					</li>
+                    {% endfor %}
+{#					<li>#}
+{#						<a href="#"><img src="images/goods/goods002.jpg"></a>#}
+{#						<h4><a href="#">玫瑰香葡萄</a></h4>#}
+{#						<div class="prize">￥16.80</div>#}
+{#					</li>#}
+				</ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<div class="sort_bar">
+				<a href="#" class="active">默认</a>
+				<a href="#">价格</a>
+				<a href="#">人气</a>
+			</div>
+
+			<ul class="goods_type_list clearfix">
+                {% for good in pages %}
+				<li>
+					<a href="{% url 'goods:goods_detail' good.id %}"><img src="{{ MEDIA_URL }}{{ good.goods_image }}"></a>
+					<h4><a href="{% url 'goods:goods_detail' good.id %}">{{ good.goods_name }}</a></h4>
+					<div class="operate">
+						<span class="prize">￥{{ good.goods_price }}</span>
+						<span class="unit">{{ good.goods_price }}/{{ good.goods_unit }}</span>
+						<a href="{% url 'carts:carts_add' good.id 1 %}" class="add_goods" title="加入购物车"></a>
+					</div>
+				</li>
+                {% endfor %}
+			</ul>
+
+			<div class="pagenation">
+                {% if pages.has_previous %}
+				<a href="{% url 'goods:goods_list' cat_id sort_id pages.previous_page_number %}">上一页</a>
+                {% else %}
+                <a href="{% url 'goods:goods_list' cat_id sort_id 1 %}">上一页</a>
+                {% endif %}
+
+                {% for pag in pages.paginator.page_range %}
+				<a href="{% url 'goods:goods_list' cat_id sort_id pag %}" class="active">{{ pag }}</a>
+                {% endfor %}
+
+                {% if pages.has_next %}
+				<a href="{% url 'goods:goods_list' cat_id sort_id pages.next_page_number %}">下一页</a>
+                {% else %}
+                <a href="{% url 'goods:goods_list' cat_id sort_id pages.paginator.num_pages %}">下一页</a>
+                {% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
