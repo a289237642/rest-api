@@ -14,6 +14,10 @@ class Client(Model):
     created_at = DateTimeField(auto_now_add=True, blank=True, null=True, verbose_name="创建时间")
     updated_at = DateTimeField(auto_now=True, blank=True, null=True, verbose_name="更新时间")
 
+    class Meta:
+        verbose_name = "主机"
+        verbose_name_plural = "主机"
+
     def __str__(self):
         return self.name
 

@@ -15,31 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.urls import path, include
-from rest_framework import routers, serializers, viewsets
+from rest_framework import routers
 from rest_framework.documentation import include_docs_urls
-
-from users.models import UserProfile
+from users.views import UserViewSet
+from clusters.views import ClusterViewSet
 import xadmin
-
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = ("username", "birthday", "gender", "mobile", "email")
-
-
-# ViewSets define the view behavior.
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserSerializer
-
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
+router.register(r'client', ClusterViewSet)
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace="rest_framework")),
     url(r'^docs/', include_docs_urls(title='My API ', public=True)),
-    # path('login/', include('users.urls', namespace='login')),
 ]
