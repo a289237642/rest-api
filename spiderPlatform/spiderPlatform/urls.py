@@ -23,6 +23,7 @@ import xadmin
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
+# 主机添加
 router.register(r'client', ClusterViewSet)
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
